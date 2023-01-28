@@ -3,3 +3,5 @@ from posts.models import Post
 
 
 admin.site.register(Post)
+
+

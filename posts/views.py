@@ -31,6 +31,14 @@ class PostDeleteView(generic.DeleteView):
     success_url = reverse_lazy("main-page")
 
 
+class PostUpdateView(generic.UpdateView):
+    model = Post
+    template_name = "post_update.html"
+    fields = ["title", "content"]
+    success_url = reverse_lazy("main-page")
+
+
+
 
 def hello(request):
     return HttpResponse("GeekTech", status=200, headers={"name": "Simon"})
@@ -43,11 +51,6 @@ def time(request):
 def goodbye(request):
     return HttpResponse("Goodbye!")
 
-class PostUpdateView(generic.UpdateView):
-    model = Post
-    template_name = "post_update.html"
-    fields = ["title", "content"]
-    success_url = reverse_lazy("main-page")
 
 # def index(request):
 #     posts = Post.objects.all()

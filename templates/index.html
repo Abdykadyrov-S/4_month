@@ -2,29 +2,21 @@
 
 {% block content %}
 <h1>Hello!</h1>
-    <!-- {{my_list}} -->
-<ul>
-    {% for elem in my_list %}
-        <li>{{ elem }}</li>
-    {% endfor %}
-</ul>
-<!-- <ul>
-    <li>1</li>
-    <li>2</li>
-    <li>3</li>
-</ul>
-<ol>
-    <li>1</li>
-    <li>2</li>
-    <li>3</li>
-</ol> -->
-    <a href="{% url 'about-page' %}">О нас</a>
+
+{% for post in posts %}
+    <a href="{% url 'post-detail' post.id %}">{{post.title}}</a>
+{% endfor %}
+
+
+<br>
+<a href="{% url 'about-page' %}">О нас</a>
+<br>
+<a href="{% url 'contacts' %}">Наши контакты</a>
+
+<form action = "{% url 'post-create' %}" method = "post">{%csrf_token%}
+    {{ form.as_p}}
+    <button type="submit"> Создать пост</button>
+</form>
+
 
 {% endblock %}
-
-<!-- #Домашка
-Создать еще одну страницу  "Контакты" по примеру страницы "О нас". 
-То есть создать новую вьюху, новый шаблон contacts.html, зарегать в urls.py
-Эндпоинт новой страницы - contacts/ -->
-<!-- Сделать перелинковку между всеми тремя страницами. На главной должны быть ссылки на О нас и Контакты.
-На странице О нас должны быть ссылки На Главную и Контакты. Так же сделать на новой странице. -->

@@ -1,18 +1,34 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
+from posts.models import Post
+from django.views import generic
+from django.urls import reverse_lazy
 import datetime
-# Create your views here.
 
-# def hello(request):
-#     my_list = [1,2,3,4]
-#     return HttpResponse(my_list)
+class IndexView(generic.ListView):
+    model = Post
+    context_object_name = "posts"
+    extra_context = {"title": "Главная страница"}
+    template_name = "index.html"
 
-# def hello(request):
-#     body = """
-#     <h1>Привет</h1>
-#     <p>Параграф</p>
-#     """   
-#     return HttpResponse(body)
+
+class POstDetailView(generic.DetailView):
+    model = Post
+    context_object_name = "posts"   
+    template_name = "post_detail.html" 
+
+
+class PostCreateView(generic.CreateView):
+    model = Post
+    template_name = "post_create.html"  
+    fields = {"title", "content"}
+    success_url = reverse_lazy("main-page")
+
+
+
+class PostDeleteView(generic.DeleteView):
+    model = Post
+    success_url = reverse_lazy("main-page")
 
 
 
@@ -27,12 +43,26 @@ def time(request):
 def goodbye(request):
     return HttpResponse("Goodbye!")
 
-def index(request):
-    context = {
-        "title": "Главная страница",
-        "my_list": [1,2,3,4,5],
-    }
-    return render(request, "index.html", context)
+class PostUpdateView(generic.UpdateView):
+    model = Post
+    template_name = "post_update.html"
+    fields = ["title", "content"]
+    success_url = reverse_lazy("main-page")
+
+# def index(request):
+#     posts = Post.objects.all()
+#     context = {
+#         "title": "Главная страница",
+#         "posts": posts
+#     }
+#     return render(request, "index.html", context)
+
+# def get_post(request, post_id):
+#     try:
+#         post = Post.objects.get(id=post_id)
+#     except Post.DoesNotExist:
+#         raise Http404("Такого поста нет")
+#     return render(request, "post_detail.html", {"post": post})
 
 def about(request):
     context = {

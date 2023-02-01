@@ -1,8 +1,9 @@
-from django.shortcuts import render
 from django.http import HttpResponse, Http404
-from posts.models import Post
+from django.shortcuts import render, redirect
+from posts.models import Post, Comment
 from django.views import generic
 from django.urls import reverse_lazy
+from posts.forms import CommentForms, PostForms
 import datetime
 
 class IndexView(generic.ListView):
@@ -16,12 +17,40 @@ class POstDetailView(generic.DetailView):
     model = Post
     context_object_name = "posts"   
     template_name = "post_detail.html" 
+    extra_context = {"form": CommentForms()}
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["form"] = CommentForms()
+    #     return context
+
+
+    def post(self, request, pk):
+        post = Post.objects.get(pk=pk)
+        form = CommentForms(request.POST)
+
+        if form.is_valid():
+            pre_saved_comment = form.save(commit=False)
+            pre_saved_comment.post = post
+            pre_saved_comment.save()
+
+        return redirect("post-detail", pk)
+
+    # def post(self, request, pk):
+    #     post = Post.objects.get(pk=pk)
+    #     name = request.POST.get("name", None)
+    #     text = request.POST.get("text", None)
+
+    #     if name and text:
+    #         comment = Comment.objects.create(name=name, text=text, post=post)
+    #         comment.save()
+    #     return redirect("post-detail", pk)
 
 
 class PostCreateView(generic.CreateView):
     model = Post
     template_name = "post_create.html"  
-    fields = {"title", "content"}
+    form_class = PostForms
     success_url = reverse_lazy("main-page")
 
 
@@ -34,14 +63,10 @@ class PostDeleteView(generic.DeleteView):
 class PostUpdateView(generic.UpdateView):
     model = Post
     template_name = "post_update.html"
-    fields = ["title", "content"]
+    form_class = PostForms
     success_url = reverse_lazy("main-page")
 
 
-
-
-def hello(request):
-    return HttpResponse("GeekTech", status=200, headers={"name": "Simon"})
 
 
 def time(request):
@@ -67,14 +92,23 @@ def goodbye(request):
 #         raise Http404("Такого поста нет")
 #     return render(request, "post_detail.html", {"post": post})
 
-def about(request):
-    context = {
-        "title": "О нас"
-    }
-    return render(request, "about.html", context )
+# def about(request):
+#     context = {
+#         "title": "О нас"
+#     }
+#     return render(request, "about.html", context )
 
-def contacts(request):
-    context = {
-        "title": "Контакты"
-    }
-    return render(request, "contacts.html", context )
+class About(generic.TemplateView):
+    template_name = "about.html"
+    extra_context = {"title": "О нас"}
+
+
+# def contacts(request):
+#     context = {
+#         "title": "Контакты"
+#     }
+#     return render(request, "contacts.html", context )
+
+class Contacts(generic.TemplateView):
+    template_name = "contacts.html"
+    extra_context = {"title": "Контакты"}

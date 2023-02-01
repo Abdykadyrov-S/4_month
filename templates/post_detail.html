@@ -3,12 +3,43 @@
 {% block content %}
     <h1>{{posts.title}}</h1>
     <p>{{posts.content}}</p>
+    <h6>{{ post.created }}</h6>
+    <hr>
 
+    {% if posts.post_comment.all %}
+        <h4>Коментарии:</h4>
+        <hr>
+    {% endif %}
+
+    
+    
+    {% for comment in posts.post_comment.all %}
+    <h3>{{ comment.name }}</h3>
+    <p>{{ comment.text }}</p>
+    <h6>{{ comment.created }}</h6>
+    <hr>
+    {% endfor %}
+    
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <!-- <label for="name">Введите имя</label>
+        <input type="text" name="name">
+        <br><br>
+
+        <label for="text">Введите комментарий</label>
+        <input type="text" name="text">
+        <br><br> -->
+
+        <input type="submit" value="Оставить комментарий">
+    </form>
+    <hr>
+    
+    
     <form action="{% url 'post-delete' posts.id %}" method="post">{% csrf_token %}
         <button type="submit">Удалить пост</button>
     </form>
-
-    <form action="{% url 'post-update' posts.id %}" method="post">{% csrf_token %}
+    <br>
+    <form action="{% url 'post-update' posts.id %}" method="get">{% csrf_token %}
         <button type="submit">Редактировать пост</button>
     </form>
 

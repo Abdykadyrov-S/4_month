@@ -13,7 +13,7 @@
 <br>
 <a href="{% url 'contacts' %}">Наши контакты</a>
 
-<form action = "{% url 'post-create' %}" method = "post">{%csrf_token%}
+<form action = "{% url 'post-create' %}" method = "get">{%csrf_token%}
     {{ form.as_p}}
     <button type="submit"> Создать пост</button>
 </form>

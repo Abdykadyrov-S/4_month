@@ -10,13 +10,13 @@ class IndexView(generic.ListView):
     model = Post
     context_object_name = "posts"
     extra_context = {"title": "Главная страница"}
-    template_name = "index.html"
+    template_name = "posts/index.html"
 
 
 class POstDetailView(generic.DetailView):
     model = Post
     context_object_name = "posts"   
-    template_name = "post_detail.html" 
+    template_name = "posts/post_detail.html" 
     extra_context = {"form": CommentForms()}
 
     # def get_context_data(self, **kwargs):
@@ -49,7 +49,7 @@ class POstDetailView(generic.DetailView):
 
 class PostCreateView(generic.CreateView):
     model = Post
-    template_name = "post_create.html"  
+    template_name = "posts/post_create.html"  
     form_class = PostForms
     success_url = reverse_lazy("main-page")
 
@@ -62,7 +62,7 @@ class PostDeleteView(generic.DeleteView):
 
 class PostUpdateView(generic.UpdateView):
     model = Post
-    template_name = "post_update.html"
+    template_name = "posts/post_update.html"
     form_class = PostForms
     success_url = reverse_lazy("main-page")
 
@@ -99,8 +99,9 @@ def goodbye(request):
 #     return render(request, "about.html", context )
 
 class About(generic.TemplateView):
-    template_name = "about.html"
+    template_name = "posts/about.html"
     extra_context = {"title": "О нас"}
+
 
 
 # def contacts(request):
@@ -110,5 +111,5 @@ class About(generic.TemplateView):
 #     return render(request, "contacts.html", context )
 
 class Contacts(generic.TemplateView):
-    template_name = "contacts.html"
+    template_name = "posts/contacts.html"
     extra_context = {"title": "Контакты"}
